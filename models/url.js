@@ -11,10 +11,6 @@ const Url = new Schema({
         type: String,
         required: true
     },
-    params: {
-        type: Array,
-        default: []
-    },
     is_visited: {
         type: Boolean,
         default: false,
@@ -23,7 +19,7 @@ const Url = new Schema({
     count: {
         type: Number,
         required: true,
-        default: 0
+        default: 1
     },
     createdAt: {
         type: Date,

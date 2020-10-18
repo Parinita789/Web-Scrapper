@@ -18,7 +18,7 @@ exports.getNotVisitedUrl = () => {
     return new Promise((resolve, reject) => {
         let query = { is_visited: false };
         let options = { url: 1, _id: 0 };
-        Url.find(query, options).then(urls => {
+        Url.find(query, options).limit(20).then(urls => {
             resolve(urls)
         }).catch(err => {
             reject(err)
@@ -30,9 +30,10 @@ exports.updateCount = (url) => {
     return new Promise((resolve, reject) => {
         let query = { url };
         Url.findOne(query).then(result => {
-            if (result) {
-                let updateData = { $set: { count: result.count + 1 } }
-                Url.findOneAndUpdate(query, updateData, { useFindAndModify: false }).then(urls => {
+            if (result !== null) {
+                let updateData = { $set: { count: result.count + 1 } };
+                let options = { upsert: false, new: false};
+                Url.findOneAndUpdate(query, updateData, options).then(urls => {
                     resolve('success')
                 }).catch(err => {
                     reject(err)
@@ -48,12 +49,21 @@ exports.updateCount = (url) => {
 
 exports.updateUrl = (url) => {
     return new Promise((resolve, reject) => {
-        let query = { url: url };
-        let updateData = { $set: { is_visited: true } };
-        Url.findOneAndUpdate(query, updateData, { useFindAndModify: false }).then(urls => {
-            resolve('success')
+        let query = { url };
+        Url.findOne(query).then(result => {
+            if (result !== null) {
+                let updateData = { $set: { is_visited: true } };
+                let options = { upsert: false, new: false};
+                Url.findOneAndUpdate(query, updateData, options).then(urls => {
+                    resolve('success')
+                }).catch(err => {
+                    reject(err)
+                })
+            } else {
+                reject('Record not found to update')
+            }
         }).catch(err => {
-            reject(err)
+            reject(err);
         })
     })
 }
