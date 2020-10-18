@@ -9,6 +9,7 @@ const Url = new Schema({
     },
     url: {
         type: String,
+        unique: true,
         required: true
     },
     is_visited: {

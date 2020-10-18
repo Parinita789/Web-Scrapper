@@ -1,6 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
 const Url = require('../models/url');
-const param = require('../models/param');
+const Param = require('../models/param');
 
 exports.getUrl = (url) => {
     return new Promise((resolve, reject) => {
@@ -18,7 +18,7 @@ exports.getNotVisitedUrl = () => {
     return new Promise((resolve, reject) => {
         let query = { is_visited: false };
         let options = { url: 1, _id: 0 };
-        Url.find(query, options).limit(20).then(urls => {
+        Url.find(query, options).then(urls => {
             resolve(urls)
         }).catch(err => {
             reject(err)
@@ -30,10 +30,10 @@ exports.updateCount = (url) => {
     return new Promise((resolve, reject) => {
         let query = { url };
         Url.findOne(query).then(result => {
-            if (result !== null) {
+            if (result) {
                 let updateData = { $set: { count: result.count + 1 } };
-                let options = { upsert: false, new: false};
-                Url.findOneAndUpdate(query, updateData, options).then(urls => {
+                let options = { upsert: false, new: false };
+                Url.updateOne(query, updateData, options).then(urls => {
                     resolve('success')
                 }).catch(err => {
                     reject(err)
@@ -49,12 +49,12 @@ exports.updateCount = (url) => {
 
 exports.updateUrl = (url) => {
     return new Promise((resolve, reject) => {
-        let query = { url };
+        let query = { url: url }
         Url.findOne(query).then(result => {
-            if (result !== null) {
+            if (result) {
                 let updateData = { $set: { is_visited: true } };
-                let options = { upsert: false, new: false};
-                Url.findOneAndUpdate(query, updateData, options).then(urls => {
+                let options = { upsert: false, new: false };
+                Url.updateOne(query, updateData, options).then(urls => {
                     resolve('success')
                 }).catch(err => {
                     reject(err)
@@ -85,7 +85,7 @@ exports.save = (url) => {
                     reject(err)
                 })
             } else {
-                resolve('success')
+                resolve('success');
             }
         }).catch(err => {
             reject(err)
@@ -96,20 +96,20 @@ exports.save = (url) => {
 exports.saveKeyword = (keyword) => {
     return new Promise((resolve, reject) => {
         let query = { keyword };
-        param.findOne(query).then(result => {
-            if (!result) {
+        Param.findOne(query).then(result => {
+            if (result) {
+                resolve('success')
+            } else {
                 let data = {
                     id: uuidv4(),
                     keyword: keyword
                 }
-                let newKeyword = new param(data);
+                let newKeyword = new Param(data);
                 newKeyword.save().then(result => {
                     resolve(result)
                 }).catch(err => {
                     reject(err)
                 })
-            } else {
-                resolve('success')
             }
         }).catch(err => {
             reject(err)

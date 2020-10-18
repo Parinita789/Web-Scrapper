@@ -79,11 +79,13 @@ async function saveQueryParams(queryStrings) {
         let keywords = queryStrings.includes('&') ? queryStrings.split('&') : [queryStrings];
         keywords.forEach(keyword => {
             keyword = keyword.split('=')[0];
-            db.saveKeyword(keyword).then(result => {
-                successList.push(keyword)
-            }).catch(err => {
-                errorList.push(keyword);
-            });
+            if (keyword) {
+                db.saveKeyword(keyword).then(result => {
+                    successList.push(keyword)
+                }).catch(err => {
+                    errorList.push(keyword);
+                });
+            }
         });
         let data = {
             errorList: errorList,

@@ -9,6 +9,7 @@ const Param = new Schema({
     },
     keyword: {
         type: String,
+        unique: true,
         required: true
     },
     createdAt: {
