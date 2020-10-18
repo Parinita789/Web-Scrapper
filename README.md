@@ -12,8 +12,8 @@ Crawling popular blogging website https://medium.com to find all possible hyperl
 2. Install MongoDB
 3. Clone the repository
 4. Open the cloned project in the terminal
-5. Run npm install
-6. Run node server.js
+5. Run command `npm install`
+6. Run command `node server.js`
 
 ----------------------------------------------
             ## Design
