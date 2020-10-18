@@ -21,8 +21,8 @@ Crawling popular blogging website https://medium.com to find all possible hyperl
 
 1. Store the https://medium.com url in DB and marked it as non-visited url.
 2. Enter into a while loop (will exit only when there is no non-visited url in DB.)
-- Fetch 10 non-visited urls from the DB at a time(for avoiding heap out of memory exception).
-- Loop on all of the child urls fetched
+- Fetch 20 non-visited urls from the DB at a time.
+- Loop on all of the non-visited urls fetched
     - For each url check with semaphore and make 5 concurrent request to deepVisitUrl function.
 - Sleep for 2s 
     
